@@ -45,6 +45,10 @@ module ActionPolicy
         end
       end
 
+      def clear
+        reasons.clear
+      end
+
       private
 
       def add_non_detailed_reason(store, rule)
@@ -227,6 +231,17 @@ module ActionPolicy
       def deny!(reason = nil)
         reject(reason) if reason
         super()
+      end
+
+      def allow!
+        result.reasons.clear
+        super()
+      end
+
+      def apply(rule)
+        super.tap do
+          result.reasons.clear if result.success?
+        end
       end
     end
   end
