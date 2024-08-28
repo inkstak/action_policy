@@ -219,8 +219,13 @@ module ActionPolicy
         res.success?
       end
 
+      def reject(reason)
+        result&.reasons&.add(self, reason)
+        false
+      end
+
       def deny!(reason = nil)
-        result&.reasons&.add(self, reason) if reason
+        reject(reason) if reason
         super()
       end
     end
